@@ -83,7 +83,6 @@ public class OutsideFragment extends Fragment {
 
 
     public void getNowDate(){
-        //final DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");Date date = new Date();
         Date date = new Date();
         SimpleDateFormat mdf = new SimpleDateFormat("MM");
         month =  Integer.parseInt(mdf.format(date));
@@ -395,7 +394,6 @@ public class OutsideFragment extends Fragment {
 
                     editor.putString("SAVE_KEY", gson.toJson(mdatas));
                     editor.commit();
-
 
                 }else {
                     aBoolean = true;
