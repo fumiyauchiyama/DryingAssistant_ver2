@@ -442,7 +442,6 @@ public class OutsideFragment extends Fragment {
                         }, 0, 60000);
                     }
 
-
                 }
 
             }
