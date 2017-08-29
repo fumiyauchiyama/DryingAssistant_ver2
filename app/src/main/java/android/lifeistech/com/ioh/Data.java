@@ -4,7 +4,7 @@ package android.lifeistech.com.ioh;
  * Created by fumiyauchiyama on 2017/07/23.
  */
 
-public class data {
+public class Data {
 
     public int month;
     public int day;
@@ -14,7 +14,7 @@ public class data {
     public String weather;
     public String memo;
 
-    public data(){
+    public Data(int month, int day, int time, int tem, int hun, String weather, String memo){
 
         this.month = month;
         this.day = day;

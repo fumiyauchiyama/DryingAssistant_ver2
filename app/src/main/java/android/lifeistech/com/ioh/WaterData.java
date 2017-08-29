@@ -4,19 +4,19 @@ package android.lifeistech.com.ioh;
  * Created by fumiyauchiyama on 2017/07/16.
  */
 
-public class waterdata {
+public class WaterData {
 
     int number;
     int number1;
 
     //からのコンストラクタ
-    public waterdata(){
+    public WaterData(){
 
 
 
     }
 
-    public waterdata(int number,int number1){
+    public WaterData(int number, int number1){
         this.number = number;
         this.number1 = number1;
     }

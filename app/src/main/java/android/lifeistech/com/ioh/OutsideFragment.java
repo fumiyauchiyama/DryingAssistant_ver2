@@ -4,10 +4,8 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -26,6 +24,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -35,18 +35,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static android.R.id.list;
 
 
 public class OutsideFragment extends Fragment {
@@ -57,14 +55,20 @@ public class OutsideFragment extends Fragment {
     TextView texthan;
     TextView temTV;
     TextView textwea;
+    TextView pretextView;
     int wd;
     int ch0;
     int ch1;
     int tem;
     int hun;
     int Time;
+    int preTime;
+    int preTimed;
     int i = 0;
+    int month;
+    int day;
     Button button;
+    ProgressBar progressBar;
 
     boolean aBoolean;
     boolean nBoolean;
@@ -73,30 +77,56 @@ public class OutsideFragment extends Fragment {
 
     LocationManager mLocationManager;
     Timer mTimer;
+    Timer preTimer;
     private Handler mHandler;
+    List<Data> mdatas;
 
-    List<data> mdatas;
-    data mdata;
 
-    private void commit(boolean aBoolean, boolean nBoolean){
-        editor.putBoolean("aboolean",aBoolean);
-        editor.putBoolean("nboolean",nBoolean);
+    public void getNowDate(){
+        //final DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");Date date = new Date();
+        Date date = new Date();
+        SimpleDateFormat mdf = new SimpleDateFormat("MM");
+        month =  Integer.parseInt(mdf.format(date));
+        SimpleDateFormat ddf = new SimpleDateFormat("dd");
+        day = Integer.parseInt(ddf.format(date));
+    }
+
+    private void commit(boolean aBoolean, boolean nBoolean) {
+        editor.putBoolean("aboolean", aBoolean);
+        editor.putBoolean("nboolean", nBoolean);
         editor.commit();
     }
 
-    private boolean getBooleans(){
+    private boolean getBooleans() {
 
-        aBoolean = pref.getBoolean("aboolean",false);
-        nBoolean = pref.getBoolean("nboolean",false);
+        aBoolean = pref.getBoolean("aboolean", false);
+        nBoolean = pref.getBoolean("nboolean", false);
 
         return aBoolean & nBoolean;
+    }
+
+    private void setdata(){
+
+        if (tem == 0 || hun == 0) {
+            return;
+        } else {
+            preTime = 85680 / (tem * (100 - hun));
+        }
+
+
+        wd = (ch0 + ch1) / 2;
+
+        texthan.setText(String.valueOf(wd));
+        temTV.setText(tem + "℃、" + hun + "%");
+        pretextView.setText(preTime / 60 + "時間" + preTime % 60 + "分");
+        progressBar.setProgress(preTime);
     }
 
     private void getWeather() {
         // リクエストオブジェクトを作って
         Request request = new Request.Builder()
                 // URLを生成
-                .url("http://api.openweathermap.org/data/2.5/find?lat=43.067885&lon=141.355539&cnt=1&APPID=b6de807d926981bf3ac26ca77b1a2ae7")
+                .url("http://api.openweathermap.org/data/2.5/find?lat=35.283611&lon=139.667221&cnt=1&APPID=b6de807d926981bf3ac26ca77b1a2ae7")
                 .get()
                 .build();
         // クライアントオブジェクトを作成する
@@ -126,7 +156,6 @@ public class OutsideFragment extends Fragment {
 
     }
 
-
     private void parseJson(String json) {
         Log.d("Json", json);
         try {
@@ -155,7 +184,7 @@ public class OutsideFragment extends Fragment {
             //JSONObject minJson = temperatureJson.get("min") != null ? temperatureJson.getJSONObject("min") : null;
             //String min = "";
             //if (minJson != null) {
-             //   min = minJson.getString("celsius");
+            //   min = minJson.getString("celsius");
             //}
             //JSONObject maxJson = temperatureJson.get("max") != null ? temperatureJson.getJSONObject("max") : null;
             //String max = "";
@@ -183,75 +212,77 @@ public class OutsideFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        pref = getContext().getSharedPreferences("pref",Context.MODE_PRIVATE);
+        pref = getContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
         editor = pref.edit();
 
-        final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
-        progressBar.setMax(1000);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
+        //progressBar.setMax(1000);
 
 
         texthan = (TextView) view.findViewById(R.id.texthan);
         textwea = (TextView) view.findViewById(R.id.textwea);
         temTV = (TextView) view.findViewById(R.id.texttem);
+        pretextView = (TextView) view.findViewById(R.id.PretextView);
         button = (Button) view.findViewById(R.id.click);
         mHandler = new Handler();
-        editor.putBoolean("aBoolean",aBoolean);
+        editor.putBoolean("aBoolean", aBoolean);
         editor.commit();
-        mdatas = new ArrayList<data>();
 
+        mdatas = new ArrayList<>();
+
+
+
+//        Bundle bundle = new Bundle();  //保存用のバンドル
+//        Map<String, ?> prefKV = getActivity().getSharedPreferences("shared_preference", Context.MODE_PRIVATE).getAll();
+//        Set<String> keys = prefKV.keySet();
+//        for(String key : keys){
+//            Object value = prefKV.get(key);
+//            if(value instanceof String){
+//                bundle.putString(key, (String) value);
+//            }else if(value instanceof Integer){
+//                // …略
+//            }
+//        }
+//
+//        String stringList = bundle.getString("list");  //key名が"list"のものを取り出す
+//
+//        if(stringList != null) {
+//            try {
+//                JSONArray array = new JSONArray(stringList);
+//                for (int i = 0, length = array.length(); i < length; i++) {
+//                    JSONObject jsonobject = array.getJSONObject(i);
+//                    int month = jsonobject.getInt("month");
+//                    int day = jsonobject.getInt("day");
+//                    int time = jsonobject.getInt("time");
+//                    int tem = jsonobject.getInt("tem");
+//                    int hun = jsonobject.getInt("hun");
+//                    String weather = jsonobject.getString("weather");
+//                    String memo = jsonobject.getString("memo");
+//                    Data data = new Data(month, day, time, tem, hun, weather, memo);
+//                    mdatas.add(data);
+//                }
+//            } catch (JSONException e1) {
+//                e1.printStackTrace();
+//            }
+//        }else{
+//            mdatas = new ArrayList<Data>();
+//        }
 
         getBooleans();
         getWeather();
 
         if (aBoolean) {
             button.setText("洗濯終了ボタン");
-            Log.d("aboolean=",String.valueOf(aBoolean));
-            Time = 0;
+            Log.d("aboolean=", String.valueOf(aBoolean));
 
-            mTimer = new Timer(false);
-            mTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Time++;
-                        }
-                    });
-                }
-            },0,1000);
 
-        }else {
+
+        } else {
             button.setText("洗濯開始ボタン");
-            Log.d("aboolean=",String.valueOf(aBoolean));
+            Log.d("aboolean=", String.valueOf(aBoolean));
 
-            mdata = new data();
-
-            mdata.time = Time;
-            mdata.month = 8;//TODO get date
-            mdata.day = 18;
-            mdata.weather = textwea.getText().toString();
-            mdata.tem = tem;
-            mdata.hun = hun;
-            mdata.memo = "";
-
-            mdatas.add(mdata);
-
-            JSONArray array = new JSONArray();
-            for (int i = 0, length = list.size(); i < length; i++) {
-                try {
-                    array.put(i, list.get(i));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-
-            editor.putString("list", array.toString());  //key名を"list"としてシリアライズ化したデータを保存
-            editor.commit();
 
         }
-
 
 
         refMug.addChildEventListener(new ChildEventListener() {
@@ -260,32 +291,19 @@ public class OutsideFragment extends Fragment {
 
                 if (dataSnapshot.getKey().equals("number")) {
                     ch0 = dataSnapshot.getValue(Integer.class);
-                    //texthan.setText(String.valueOf(wd));
-                    //progressBar.setProgress(wd);
                 }
-
                 if (dataSnapshot.getKey().equals("number1")) {
                     ch1 = dataSnapshot.getValue(Integer.class);
-
                 }
                 if (dataSnapshot.getKey().equals("temperature")) {
                     tem = dataSnapshot.getValue(Integer.class);
-                    //texthan.setText(String.valueOf(wd));
-                    //progressBar.setProgress(wd);
                 }
                 if (dataSnapshot.getKey().equals("humidity")) {
                     hun = dataSnapshot.getValue(Integer.class);
-                    //texthan.setText(String.valueOf(wd));
-                    //progressBar.setProgress(wd);
                 }
 
-
-                wd = (ch0 + ch1) / 2;
-
-                texthan.setText(String.valueOf(wd));
-                temTV.setText(tem + "℃、" + hun + "%");
-                //texthan.setText("" + wd);
-                progressBar.setProgress(wd);
+                preTimed = preTime;
+                setdata();
 
             }
 
@@ -294,31 +312,19 @@ public class OutsideFragment extends Fragment {
 
                 if (dataSnapshot.getKey().equals("number")) {
                     ch0 = dataSnapshot.getValue(Integer.class);
-                    //texthan.setText(String.valueOf(wd));
-                    //progressBar.setProgress(wd);
                 }
 
                 if (dataSnapshot.getKey().equals("number1")) {
                     ch1 = dataSnapshot.getValue(Integer.class);
-
                 }
                 if (dataSnapshot.getKey().equals("temperature")) {
                     tem = dataSnapshot.getValue(Integer.class);
-                    //texthan.setText(String.valueOf(wd));
-                    //progressBar.setProgress(wd);
                 }
                 if (dataSnapshot.getKey().equals("humidity")) {
                     hun = dataSnapshot.getValue(Integer.class);
-                    //texthan.setText(String.valueOf(wd));
-                    //progressBar.setProgress(wd);
                 }
 
-                wd = (ch0 + ch1) / 2;
-
-                texthan.setText(String.valueOf(wd));
-                temTV.setText(tem + "℃、" + hun + "%");
-                progressBar.setProgress(wd);
-
+                setdata();
 
                 if (wd <= 5 && aBoolean && nBoolean) {
 
@@ -333,26 +339,23 @@ public class OutsideFragment extends Fragment {
                     NotificationManager manager = (NotificationManager) getContext().getSystemService(Service.NOTIFICATION_SERVICE);
                     manager.notify(0, builder.build());
                     nBoolean = false;
-                    commit(aBoolean,nBoolean);
+                    commit(aBoolean, nBoolean);
 
                     mTimer.cancel();
                     return;
-
 
                 } else {
 
                 }
 
-                if(i == 0){
+                if (i == 0) {
                     getWeather();
                     i++;
-                }else if (i == 9){
+                } else if (i == 9) {
                     i = 0;
-                }else {
+                } else {
                     i++;
                 }
-
-
 
             }
 
@@ -372,21 +375,9 @@ public class OutsideFragment extends Fragment {
         });
 
 
-
-
-
-        View.OnClickListener link = new View.OnClickListener() {
-            public void onClick(View v) {
-                Uri uri = Uri.parse("http://openweathermap.org/");
-                Intent i = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(i);
-            }
-        };
-
-        /*button.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
                 if (aBoolean) {
                     aBoolean = false;
@@ -395,6 +386,17 @@ public class OutsideFragment extends Fragment {
                     commit(aBoolean,nBoolean);
                     Log.d("aboolean=",String.valueOf(aBoolean));
 
+                    Gson gson = new Gson();
+                    getNowDate();
+                    Data mdata = new Data(month, day, Time, tem, hun,textwea.getText().toString(), null);
+
+                    mdatas = gson.fromJson(pref.getString("SAVE_KEY", ""), new TypeToken<ArrayList<String>>(){}.getType());
+                    mdatas.add(mdata);
+
+                    editor.putString("SAVE_KEY", gson.toJson(mdatas));
+                    editor.commit();
+
+
                 }else {
                     aBoolean = true;
                     nBoolean = true;
@@ -402,15 +404,53 @@ public class OutsideFragment extends Fragment {
                     Log.d("aboolean=",String.valueOf(aBoolean));
                     commit(aBoolean,nBoolean);
 
+                    Time = 0;
+
+                    mTimer = new Timer(false);
+                    mTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Time++;
+                                }
+                            });
+                        }
+                    }, 0, 1000);
+
+                    if (tem == 0 || hun == 0) {
+                        return;
+                    } else {
+                        preTime = 85680 / (tem * (100 - hun));
+                        preTimed = preTime;
+                        progressBar.setMax(preTimed);
+                        preTimer = new Timer(false);
+                        preTimer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                mHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        preTime--;
+                                        if(preTime == 0){
+                                            preTimer.cancel();
+                                        }
+                                        pretextView.setText(preTime / 60 + "時間" + preTime % 60 + "分");
+                                        progressBar.setProgress(preTime);
+                                    }
+                                });
+                            }
+                        }, 0, 60000);
+                    }
+
+
                 }
 
             }
-        });*/
+        });
 
 
     }
-
-
-
 
 }

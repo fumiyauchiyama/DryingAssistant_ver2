@@ -28,22 +28,23 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:id="@+id/progressbar" />
 
-            <Chronometer
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/chronometer4"
-                android:textSize="40sp"
-                android:gravity="center"
-                android:layout_gravity="center" />
+            <TextView
+                android:id="@+id/PretextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="00"
+                android:textColor="@android:color/background_dark"
+                android:textSize="30sp" />
 
             <TextView
-                android:text="あと"
+                android:id="@+id/textView6"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/textView6"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_marginBottom="30dp"
-                android:gravity="center" />
+                android:gravity="center"
+                android:text="あと" />
 
         </FrameLayout>
 
@@ -71,14 +72,14 @@
                     android:paddingRight="5dp" />
 
                 <TextView
-                    android:text="24℃、40%"
+                    android:id="@+id/texttem"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/texttem"
-                    android:textSize="24sp"
                     android:layout_gravity="center"
                     android:gravity="center_horizontal"
-                    android:textColor="#7CB342" />
+                    android:text="取得中"
+                    android:textColor="#7CB342"
+                    android:textSize="24sp" />
 
             </LinearLayout>
 
@@ -99,15 +100,15 @@
                     android:layout_width="wrap_content" />
 
                 <TextView
-                    android:text="やや濡れている"
-                    android:layout_height="wrap_content"
                     android:id="@+id/texthan"
-                    android:layout_weight="3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textSize="18sp"
-                    android:textColor="#039BE5"
+                    android:layout_weight="3"
                     android:gravity="center"
-                    android:layout_width="wrap_content" />
+                    android:text="取得中"
+                    android:textColor="#039BE5"
+                    android:textSize="18sp" />
 
                 <ImageView
                     android:layout_height="wrap_content"
@@ -118,30 +119,31 @@
                     android:layout_width="wrap_content" />
 
                 <TextView
-                    android:text="晴れのち曇り"
-                    android:layout_height="wrap_content"
                     android:id="@+id/textwea"
-                    android:layout_weight="3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textSize="18sp"
-                    android:paddingRight="5dp"
-                    android:textColor="#FFB300"
+                    android:layout_weight="3"
                     android:gravity="center"
-                    android:layout_width="wrap_content" />
+                    android:paddingRight="5dp"
+                    android:text="取得中"
+                    android:textColor="#FFB300"
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
             <Button
-                android:text="洗濯開始ボタン"
                 android:id="@+id/click"
-                android:layout_height="wrap_content"
                 android:layout_width="280dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
                 android:background="#FB8C00"
-                android:textColor="@android:color/background_light"
                 android:elevation="2dp"
-                android:padding="5dp" />
+                android:onClick="click"
+                android:padding="5dp"
+                android:text="洗濯開始ボタン"
+                android:textColor="@android:color/background_light" />
 
         </LinearLayout>
 
