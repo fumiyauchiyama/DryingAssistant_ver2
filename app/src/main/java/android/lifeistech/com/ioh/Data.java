@@ -6,23 +6,25 @@ package android.lifeistech.com.ioh;
 
 public class Data {
 
-    public int month;
-    public int day;
-    public int time;
-    public int tem;
-    public int hun;
+    public int    year;
+    public int    month;
+    public int    day;
+    public int    time;
+    public int    tem;
+    public int    hun;
     public String weather;
     public String memo;
 
-    public Data(int month, int day, int time, int tem, int hun, String weather, String memo){
+    public Data(int month, int day, int time, int tem, int hun, String weather, String memo,int year){
 
-        this.month = month;
-        this.day = day;
-        this.time = time;
-        this.tem = tem;
-        this.hun = hun;
+        this.year    = year;
+        this.month   = month;
+        this.day     = day;
+        this.time    = time;
+        this.tem     = tem;
+        this.hun     = hun;
         this.weather = weather;
-        this.memo = memo;
+        this.memo    = memo;
 
     }
 

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dialog"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@android:color/background_light"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:radius="4dp">
+
+    <ImageView
+        android:id="@+id/dialogimage"
+        android:layout_width="126dp"
+        android:layout_height="108dp"
+        android:layout_marginTop="32dp"
+        android:padding="16dp"
+        app:srcCompat="@drawable/crownstamp" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:text="取り込みが完了しました！"
+        android:textColor="@android:color/background_dark"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="8dp"
+        android:layout_marginBottom="32dp"
+        android:text="今日も一日お疲れ様でした！"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="148dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/dialogmemo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:onClick="dialogmemo"
+            android:text="メモを書く"
+            android:textColor="#2979FF"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/dialogok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:onClick="dialogok"
+            android:text="OK"
+            android:textColor="#2979FF"
+            android:textSize="12sp" />
+    </LinearLayout>
+</LinearLayout>

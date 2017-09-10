@@ -70,8 +70,6 @@ public class NotificationService extends FirebaseMessagingService {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if (dataSnapshot.getKey().equals("number")) {
                     ch0 = dataSnapshot.getValue(Integer.class);
-                    //texthan.setText(String.valueOf(wd));
-                    //progressBar.setProgress(wd);
                 }
 
                 if (dataSnapshot.getKey().equals("number1")) {
@@ -112,8 +110,6 @@ public class NotificationService extends FirebaseMessagingService {
 
                 if (dataSnapshot.getKey().equals("number")) {
                     ch0 = dataSnapshot.getValue(Integer.class);
-                    //texthan.setText(String.valueOf(wd));
-                    //progressBar.setProgress(wd);
                 }
 
                 if (dataSnapshot.getKey().equals("number1")) {

@@ -78,7 +78,7 @@ public class DataAdapter extends ArrayAdapter<Data> {
         if (item != null) {
             setIconImage(viewHoler.imageView, item);
             viewHoler.datetextview.setText(String.valueOf(item.month) + "月" + String.valueOf(item.day) + "日");
-            viewHoler.timetextview.setText(String.valueOf(item.time));
+            viewHoler.timetextview.setText(String.valueOf(item.time) + "分 , " + String.valueOf(item.year));
 
             Log.d("Adapter", "item is not null: " + mData.size());
             /*viewHoler.Card.setOnClickListener(new View.OnClickListener(){

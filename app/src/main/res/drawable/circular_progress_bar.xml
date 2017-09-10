@@ -3,7 +3,7 @@
     android:fromDegrees="270"
     android:toDegrees="270">
     <shape
-        android:innerRadiusRatio="2.5"
+        android:innerRadiusRatio="2.3"
         android:shape="ring"
         android:thickness="6dp"
         android:useLevel="true"><!-- this line fixes the issue for lollipop api 21 -->
@@ -14,5 +14,7 @@
             android:startColor="#0277BD"
             android:type="sweep"
             android:useLevel="false" />
+
+        <corners android:radius="24dp" />
     </shape>
 </rotate>

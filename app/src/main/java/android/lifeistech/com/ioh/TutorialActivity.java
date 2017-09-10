@@ -22,7 +22,7 @@ public class TutorialActivity extends AppCompatActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.tutorial_view_pager);
         viewPager.setAdapter(new TutorialViewPagerAdapter(getSupportFragmentManager()));
 
-        plef = getSharedPreferences("plef_start",MODE_PRIVATE);
+        plef = getSharedPreferences("pref",MODE_PRIVATE);
 
         SharedPreferences.Editor editor = plef.edit();
         editor.putBoolean("key_tutorial",true);

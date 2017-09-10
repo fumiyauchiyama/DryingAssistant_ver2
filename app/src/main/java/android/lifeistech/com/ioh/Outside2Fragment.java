@@ -42,28 +42,6 @@ public class Outside2Fragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-//        gson = new Gson();
-//        pref = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
-//
-//
-//        mListView = (ListView)getActivity().findViewById(R.id.outside2_listview);
-//        mData = new ArrayList<>();
-//
-//        if(mData == null) {
-//            String json = pref.getString("SAVE_KEY", "");
-//            mData = gson.fromJson(json, new TypeToken<ArrayList<Data>>() {
-//            }.getType());
-//        }
-
-//        mData.add(new Data(8, 18, 160, 0, 0, "fuu", "hoge"));
-//        mData.add(new Data(8, 20, 174, 0, 0, "Clouds", "hoge"));
-//        mData.add(new Data(8, 25, 153, 0, 0, "Clear", "hoge"));
-//        mData.add(new Data(8, 27, 94,0, 0,"Rain", null));
-
-//        mDataAdapter = new DataAdapter(getActivity(),R.layout.card,mData);
-//
-//        mListView.setAdapter(mDataAdapter);
     }
 
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -73,85 +51,34 @@ public class Outside2Fragment extends Fragment {
 
 
         mListView = (ListView)getActivity().findViewById(R.id.outside2_listview);
+
         mData = new ArrayList<Data>();
-        if(mData == null) {
-            String json = pref.getString("SAVE_KEY", "");
+        if(mData.size() == 0) {
+            String json = pref.getString("SAVE_KEY", "[]");
             mData = gson.fromJson(json, new TypeToken<ArrayList<Data>>() {
             }.getType());
         }
+        if(mData == null){
+            mData = new ArrayList<Data>();
+        }
+        //mData.add(new Data(0, 0, 0, 0, 0, "fuu", "hoge",2017));
 
-        mData.add(new Data(0, 0, 0, 0, 0, "fuu", "hoge"));
+
+
+        //mDataAdapter = new DataAdapter(getActivity(),R.layout.card,mData);
 
         mDataAdapter = new DataAdapter(getActivity(),R.layout.card,mData);
-
-        if(mDataAdapter == null){
-            mDataAdapter = new DataAdapter(getActivity(),R.layout.card,mData);
-            mListView.setAdapter(mDataAdapter);
-            Log.d("mDa","null");
-        }else{
-            mDataAdapter = new DataAdapter(getActivity(),R.layout.card,mData);
-            Log.d("mDa","is not null");
-            mListView.setAdapter(mDataAdapter);
-        }
+        mListView.setAdapter(mDataAdapter);
 
 
 
-
-//        if(mListView == null){
-//            Log.d("list","null");
-//        }else {
-//            Log.d("list")
-//        }
-
-
-        /*Bundle bundle = new Bundle();  //保存用のバンドル
-        Map<String, ?> prefKV = getActivity().getSharedPreferences("shared_preference", Context.MODE_PRIVATE).getAll();
-        Set<String> keys = prefKV.keySet();
-        for(String key : keys){
-            Object value = prefKV.get(key);
-            if(value instanceof String){
-                bundle.putString(key, (String) value);
-            }else if(value instanceof Integer){
-                // …略
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), DataActivity.class);
+                intent.putExtra("position", position);
+                startActivity(intent);
             }
-        }
-
-        String stringList = bundle.getString("list"); //key名が"list"のものを取り出す
-        if(stringList != null) {
-
-            try {
-                JSONArray array = new JSONArray(stringList);
-                for (int i = 0, length = array.length(); i < length; i++) {
-                    JSONObject jsonobject = array.getJSONObject(i);
-                    int month = jsonobject.getInt("month");
-                    int day = jsonobject.getInt("day");
-                    int time = jsonobject.getInt("time");
-                    int tem = jsonobject.getInt("tem");
-                    int hun = jsonobject.getInt("hun");
-                    String weather = jsonobject.getString("weather");
-                    String memo = jsonobject.getString("memo");
-                    data data = new data(month, day, time, tem, hun, weather, memo);
-                    mdatas.add(data);
-                    mlistView.setAdapter(mdataAdapter);
-                }
-            } catch (JSONException e1) {
-                e1.printStackTrace();
-            }
-        }*/
-
+        });
     }
-
-
-    //@Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(this.getContext(), DataActivity.class);
-        // インテントにセット
-        intent.putExtra("position", position);
-        // Activity をスイッチする
-        startActivity(intent);
-    }
-
-
-
-
 }
