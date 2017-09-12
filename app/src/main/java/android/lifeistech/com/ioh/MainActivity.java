@@ -1,10 +1,11 @@
 package android.lifeistech.com.ioh;
 
+import android.app.Activity;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -24,24 +25,22 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.List;
+
 import static android.R.attr.value;
-import static java.security.AccessController.getContext;
+import static android.support.v4.view.PagerAdapter.POSITION_NONE;
+import static android.support.v4.view.PagerAdapter.POSITION_UNCHANGED;
 
 public class MainActivity extends AppCompatActivity {
 
     boolean aBoolean;
     SharedPreferences plef;
-    SharedPreferences.Editor editor;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference refMug = database.getReference();
 
-    TextView texthan;
-
     public static final String ARG_TYPE = "type";
     public static final String ARG_ID = "id";
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout.setupWithViewPager(viewPager);
 
-        plef = getSharedPreferences("pref",MODE_PRIVATE);
+        plef = getSharedPreferences("plef_start",MODE_PRIVATE);
 
         aBoolean = plef.getBoolean("key_tutorial",false);
 
@@ -82,14 +81,27 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-//        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
-//            public void onPageScrollStateChanged(int state) {
-//                if (ViewPager.SCROLL_STATE_IDLE == state) {
-//                    viewPager.removeView(Outside2Fragment);
-//                }
-//            }
-//        });
-        }
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 1){
+                   //TODO Fragmentの更新
+                }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+    }
 
 
     @Override
@@ -97,14 +109,12 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.Help:
                 // ボタンをタップした際の処理を記述
-                Intent intent = new Intent(this, TutorialActivity.class);
+                Intent intent = new Intent(this,TutorialActivity.class);
                 startActivity(intent);
-            case R.id.Setting:
-                Intent Settingintent = new Intent(this, SettingActivity.class);
-                startActivity(Settingintent);
         }
         return true;
     }
+
 
 
 

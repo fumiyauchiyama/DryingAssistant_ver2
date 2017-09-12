@@ -3,6 +3,10 @@ package android.lifeistech.com.ioh;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.view.ViewGroup;
+
+import java.util.List;
 
 /**
  * Created by fumiyauchiyama on 2017/06/10.
@@ -25,6 +29,18 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
         }else{
             return  new Outside2Fragment();
+        }
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        super.destroyItem(container, position, object);
+
+        if (position <= getCount()) {
+            FragmentManager manager = ((Fragment) object).getFragmentManager();
+            FragmentTransaction trans = manager.beginTransaction();
+            trans.remove((Fragment) object);
+            trans.commit();
         }
     }
 
