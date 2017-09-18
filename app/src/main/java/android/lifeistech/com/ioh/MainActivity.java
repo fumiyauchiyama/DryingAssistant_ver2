@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference refMug = database.getReference();
 
+    NotificationBroadcastReciever notificationBroadcastReciever;
+
     public static final String ARG_TYPE = "type";
     public static final String ARG_ID = "id";
 
@@ -103,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -115,7 +116,14 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
 
+        notificationBroadcastReciever = new NotificationBroadcastReciever();
+        unregisterReceiver(notificationBroadcastReciever);
+
+    }
 
 
 }

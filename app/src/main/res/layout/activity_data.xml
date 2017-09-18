@@ -20,12 +20,11 @@
         android:paddingRight="30dp">
 
         <TextView
-            android:text="7:28 ~ 16:17"
+            android:id="@+id/timetextViews"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/timetextViews"
-            android:textSize="50sp"
-            android:textColor="@android:color/background_dark" />
+            android:textColor="@android:color/background_dark"
+            android:textSize="50sp" />
 
         <TextView
             android:id="@+id/weathertextViews"

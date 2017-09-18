@@ -28,6 +28,11 @@ public class DataAdapter extends ArrayAdapter<Data> {
 
     }
 
+    public void setmData(List<Data> mData) {
+        this.mData = mData;
+        notifyDataSetChanged();
+    }
+
     @Override
     public Data getItem(int position) {
 

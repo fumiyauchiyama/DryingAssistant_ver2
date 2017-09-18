@@ -3,7 +3,6 @@ package android.lifeistech.com.ioh;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.renderscript.Sampler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -20,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.valueOf;
-import static java.security.AccessController.getContext;
 
 public class DataActivity extends AppCompatActivity {
 
@@ -71,20 +68,36 @@ public class DataActivity extends AppCompatActivity {
 
         if(data.weather.startsWith("Thunderstorm")){
             fab.setImageResource(R.drawable.thunders);
+            fab.setBackgroundResource(R.color.thunderstorm);
+
         }else if(data.weather.startsWith("Drizzle")){
             fab.setImageResource(R.drawable.rains);
-        }else if(data.weather == "Rain") {
+            fab.setBackgroundResource(R.color.rain);
+
+        }else if(data.weather.startsWith("Rain")) {
             fab.setImageResource(R.drawable.rains);
-        }else if (data.weather == "Snow"){
+            fab.setBackgroundResource(R.color.rain);
+
+        }else if (data.weather.startsWith("Snow")){
             fab.setImageResource(R.drawable.snows);
-        }else if (data.weather == "Atmosphere"){
+            fab.setBackgroundResource(R.color.snow);
+
+        }else if (data.weather.startsWith("Atmosphere")){
             fab.setImageResource(R.drawable.suns);
-        }else if (data.weather == "Clear"){
+            fab.setBackgroundResource(R.color.clear);
+
+        }else if (data.weather.startsWith("Clear")){
             fab.setImageResource(R.drawable.suns);
+            fab.setBackgroundResource(R.color.clear);
+
         }else if(data.weather.startsWith("Clouds")) {
             fab.setImageResource(R.drawable.clouds);
+            fab.setBackgroundResource(R.color.clouds);
+
         }else{
             fab.setImageResource(R.drawable.crowns);
+            fab.setBackgroundResource(R.color.crown);
+
         }
     }
 

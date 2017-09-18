@@ -9,8 +9,9 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="android.lifeistech.com.ioh.StartActivity"
-    android:background="#81D4FA">
+    tools:context="android.lifeistech.com.ioh.TutorialActivity"
+    android:background="#81D4FA"
+    android:screenOrientation="portrait">
 
 
     <FrameLayout

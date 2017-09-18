@@ -6,8 +6,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.view.ViewGroup;
 
-import java.util.List;
-
 /**
  * Created by fumiyauchiyama on 2017/06/10.
  */
@@ -28,7 +26,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             return  new OutsideFragment();
 
         }else{
-            return  new Outside2Fragment();
+            return  new HistoryFragment();
         }
     }
 

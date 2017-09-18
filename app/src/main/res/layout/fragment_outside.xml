@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="android.lifeistech.com.ioh.OutsideFragment">
+    tools:context="android.lifeistech.com.ioh.OutsideFragment"
+    android:screenOrientation="portrait">
 
 
     <LinearLayout
