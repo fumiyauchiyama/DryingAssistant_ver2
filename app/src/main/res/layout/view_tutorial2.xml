@@ -60,7 +60,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/lefttwo"
+                app:srcCompat="@drawable/tutorial_left"
                 android:id="@+id/imageView6" />
 
             <Space
@@ -71,7 +71,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/righttwo"
+                app:srcCompat="@drawable/tutorial_right"
                 android:id="@+id/imageView5"
                 android:layout_gravity="right" />
         </LinearLayout>

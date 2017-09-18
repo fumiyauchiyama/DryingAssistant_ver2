@@ -31,15 +31,13 @@ import static android.R.attr.value;
 import static android.support.v4.view.PagerAdapter.POSITION_NONE;
 import static android.support.v4.view.PagerAdapter.POSITION_UNCHANGED;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OutsideFragment.TextChangedListener {
 
     boolean aBoolean;
     SharedPreferences plef;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference refMug = database.getReference();
-
-    NotificationBroadcastReciever notificationBroadcastReciever;
 
     public static final String ARG_TYPE = "type";
     public static final String ARG_ID = "id";
@@ -60,8 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tab_layout);
 
-
-        //ProgressBar progressBar = (ProgressBar)findViewById(R.id.progressbar) ;
+        Fragment fragment = OutsideFragment.createIntent();
 
         final ViewPager viewPager = (ViewPager)findViewById(R.id.viewpager);
         viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
@@ -120,10 +117,13 @@ public class MainActivity extends AppCompatActivity {
     public void onDestroy(){
         super.onDestroy();
 
-        notificationBroadcastReciever = new NotificationBroadcastReciever();
-        unregisterReceiver(notificationBroadcastReciever);
+
 
     }
 
+    @Override
+    public void onTextChanged(NotificationBroadcastReciever notificationBroadcastReciever) {
+        unregisterReceiver(notificationBroadcastReciever);
+    }
 
 }

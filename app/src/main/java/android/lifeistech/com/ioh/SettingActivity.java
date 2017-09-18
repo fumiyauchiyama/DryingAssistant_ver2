@@ -14,7 +14,6 @@ import java.util.ListIterator;
 
 public class SettingActivity extends AppCompatActivity {
     ListView listView;
-    SettingcardAdapter sadapter;
     List<SettingCard> mlist;
 
     @Override
@@ -24,9 +23,6 @@ public class SettingActivity extends AppCompatActivity {
 
         mlist = new ArrayList<SettingCard>();
         mlist.add(new SettingCard("Test","This massage is a test",false));
-        sadapter = new SettingcardAdapter(this,R.layout.settingcard);
-        listView = (ListView)findViewById(R.id.settinglistview);
-        listView.setAdapter(sadapter);
 
 
     }

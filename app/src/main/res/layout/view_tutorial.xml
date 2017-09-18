@@ -9,9 +9,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="android.lifeistech.com.ioh.TutorialActivity"
-    android:background="#81D4FA"
-    android:screenOrientation="portrait">
+    android:screenOrientation="portrait"
+    tools:context="android.lifeistech.com.ioh.TutorialActivity">
 
 
     <FrameLayout
@@ -19,88 +18,101 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
             android:gravity="right|center_vertical"
-            android:layout_gravity="bottom|right">
+            android:orientation="horizontal">
 
             <TextView
-                android:text="右へスライド"
+                android:id="@+id/textView12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView12"
+                android:text="右へスライド"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <ImageView
+                android:id="@+id/imageView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/righttwo"
-                android:id="@+id/imageView4" />
+                android:background="@color/clear"
+                app:srcCompat="@drawable/tutorial_right" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/one"
             android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:background="#2196F3"
-            android:weightSum="1"
+            android:layout_height="400dp"
             android:layout_margin="3dp"
-            android:elevation="3dp"
             android:layout_marginBottom="10dp"
-            android:layout_height="400dp">
+            android:background="#2196F3"
+            android:elevation="3dp"
+            android:orientation="vertical"
+            android:weightSum="1">
 
             <TextView
-                android:text="ハンガーにかける"
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView"
+                android:layout_margin="10dp"
+                android:text="ハンガーにかける"
                 android:textColor="@android:color/background_light"
-                android:textStyle="bold"
                 android:textSize="30sp"
-                android:layout_margin="10dp" />
+                android:textStyle="bold" />
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_weight="3" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/imageView3"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/icon64"
-                    android:id="@+id/imageView3" />
+                    android:layout_weight="2"
+                    app:srcCompat="@drawable/tutorial_wear" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/icforward24dp"
                     android:id="@+id/imageView2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp" />
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="2"
+                    app:srcCompat="@drawable/tutorial" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/imageView"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    app:srcCompat="@drawable/icon_hungar" />
+
+                <Space
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/icon_020802"
-                    android:id="@+id/imageView" />
+                    android:layout_weight="3" />
             </LinearLayout>
 
             <TextView
-                android:text="ハンガーの水センサーが　　反応すると自動でタイマー　起動。その場所の天気と　　気温、風速から予想乾燥時間を計算。天候が悪くなる場合は部屋干しモードになります。"
+                android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView2"
-                android:gravity="center"
-                android:layout_marginTop="30dp"
-                android:textSize="24sp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:textColor="@android:color/background_light" />
+                android:layout_marginTop="30dp"
+                android:gravity="center"
+                android:text="ハンガーの水センサーが　　反応すると自動でタイマー　起動。その場所の天気と　　気温、風速から予想乾燥時間を計算。天候が悪くなる場合は部屋干しモードになります。"
+                android:textColor="@android:color/background_light"
+                android:textSize="24sp" />
 
         </LinearLayout>
 

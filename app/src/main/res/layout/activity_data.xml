@@ -53,22 +53,22 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
-        android:layout_alignParentTop="true"
+        android:layout_height="115dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:paddingLeft="20dp"
-        android:layout_height="130dp">
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary"
+        android:paddingLeft="20dp">
 
         <TextView
-            android:text="7月26日"
+            android:id="@+id/datetextViews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/datetextViews"
             android:layout_gravity="bottom"
-            android:textSize="30sp"
+            android:layout_marginBottom="5dp"
+            android:text="7月26日"
             android:textColor="@android:color/background_light"
-            android:layout_marginBottom="5dp" />
+            android:textSize="30sp" />
 
     </FrameLayout>
 
@@ -84,6 +84,6 @@
         android:layout_marginTop="85dp"
         android:clickable="true"
         app:fabSize="normal"
-        app:srcCompat="@drawable/suns" />
+        app:srcCompat="@drawable/for_fab_suns" />
 
 </RelativeLayout>

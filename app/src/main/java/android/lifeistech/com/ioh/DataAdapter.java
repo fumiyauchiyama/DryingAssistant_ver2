@@ -105,21 +105,21 @@ public class DataAdapter extends ArrayAdapter<Data> {
 
     private void setIconImage(ImageView imageView, Data data) {
         if (data.weather.equals("Thunderstorm")) {
-            imageView.setImageResource(R.drawable.thunderstanp);
+            imageView.setImageResource(R.drawable.stamp_thunder);
         } else if (data.weather.equals("Drizzle")) {
-            imageView.setImageResource(R.drawable.rainstamp);
+            imageView.setImageResource(R.drawable.stamp_rain);
         } else if (data.weather.equals("Rain")) {
-            imageView.setImageResource(R.drawable.rainstamp);
+            imageView.setImageResource(R.drawable.stamp_rain);
         } else if (data.weather.equals("Snow")) {
-            imageView.setImageResource(R.drawable.snowstamp);
+            imageView.setImageResource(R.drawable.stamp_snow);
         } else if (data.weather.equals("Atmosphere")) {
-            imageView.setImageResource(R.drawable.sunstamp);
+            imageView.setImageResource(R.drawable.stamp_sun);
         } else if (data.weather.equals("Clear")) {
-            imageView.setImageResource(R.drawable.sunstamp);
+            imageView.setImageResource(R.drawable.stamp_sun);
         } else if (data.weather.equals("Clouds")) {
-            imageView.setImageResource(R.drawable.cloudstamp);
+            imageView.setImageResource(R.drawable.stamp_cloud);
         } else {
-            imageView.setImageResource(R.drawable.crownstamp);
+            imageView.setImageResource(R.drawable.stamp_crown);
         }
     }
 

@@ -51,7 +51,7 @@ import java.util.TimerTask;
 import static android.lifeistech.com.ioh.R.layout.dialog;
 
 
-public class OutsideFragment extends Fragment {
+public class OutsideFragment extends Fragment{
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
@@ -62,7 +62,6 @@ public class OutsideFragment extends Fragment {
     TextView TemperatureTextView;
     TextView textweather;
     TextView pretextView;       //pre = Prediction
-
 
     int waterdata;
     int ch0;
@@ -90,16 +89,12 @@ public class OutsideFragment extends Fragment {
 
     List<Data> mdatas;
 
-    NotificationService notificationService;
     NotificationBroadcastReciever notificationBroadcastReciever;
     IntentFilter intentFilter;
 
-    int inteWeather = 0; // -1 の時は無効、0 は晴れ、１は雨
-
-    Weather weather = Weather.Null;
-
-    enum Weather {
-        Sun, Rain, Null
+    private TextChangedListener listener;
+    public static Fragment createIntent() {
+        return new OutsideFragment();
     }
 
     public void getNowDate() {
@@ -122,10 +117,9 @@ public class OutsideFragment extends Fragment {
     private void Notification(String title, String content, String ticker, int Iconid,int Notificationid) {
         android.support.v7.app.NotificationCompat.Builder builder = new android.support.v7.app.NotificationCompat.Builder(getContext());
         builder.setSmallIcon(Iconid);
-        builder.setLargeIcon(BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.dryingassistant));
+        builder.setLargeIcon(BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.ic_launcher));
         builder.setContentTitle(title);
         builder.setContentText(content);
-        //builder.setContentInfo("情報欄");
         builder.setTicker(ticker);
         builder.setDefaults(Notification.DEFAULT_ALL);
         builder.setWhen(System.currentTimeMillis());
@@ -327,7 +321,7 @@ public class OutsideFragment extends Fragment {
                 getBooleans();
 
                 if (textweather.getText().toString().equals("Rain") || textweather.getText().toString().equals("Drizzle") && isAlreadyNotified) {
-                    Notification("雨が降っています！", "洗濯物が濡れている可能性があります", "雨が降ってます！", R.drawable.rains, 1);
+                    Notification("雨が降っています！", "洗濯物が濡れている可能性があります", "雨が降ってます！", R.drawable.for_fab_rains, 1);
                     isAlreadyNotified = false;
                     editor.putBoolean("rainBoolean", isAlreadyNotified);
                     editor.commit();
@@ -402,21 +396,21 @@ public class OutsideFragment extends Fragment {
 
                 ImageView imageView = (ImageView) view1.findViewById(R.id.dialogimage);
                 if (mdata.weather.equals("Thunderstorm")) {
-                    imageView.setImageResource(R.drawable.thunderstanp);
+                    imageView.setImageResource(R.drawable.stamp_thunder);
                 } else if (mdata.weather.equals("Drizzle")) {
-                    imageView.setImageResource(R.drawable.rainstamp);
+                    imageView.setImageResource(R.drawable.stamp_rain);
                 } else if (mdata.weather.equals("Rain")) {
-                    imageView.setImageResource(R.drawable.rainstamp);
+                    imageView.setImageResource(R.drawable.stamp_rain);
                 } else if (mdata.weather.equals("Snow")) {
-                    imageView.setImageResource(R.drawable.snowstamp);
+                    imageView.setImageResource(R.drawable.stamp_snow);
                 } else if (mdata.weather.equals("Atmosphere")) {
-                    imageView.setImageResource(R.drawable.sunstamp);
+                    imageView.setImageResource(R.drawable.stamp_sun);
                 } else if (mdata.weather.equals("Clear")) {
-                    imageView.setImageResource(R.drawable.sunstamp);
+                    imageView.setImageResource(R.drawable.stamp_sun);
                 } else if (mdata.weather.equals("Clouds")) {
-                    imageView.setImageResource(R.drawable.cloudstamp);
+                    imageView.setImageResource(R.drawable.stamp_cloud);
                 } else {
-                    imageView.setImageResource(R.drawable.crownstamp);
+                    imageView.setImageResource(R.drawable.stamp_crown);
                 }
 
                 Button okButton = (Button) view1.findViewById(R.id.dialogok);
@@ -426,6 +420,8 @@ public class OutsideFragment extends Fragment {
                     Intent memoIntent = new Intent(getActivity(), DataActivity.class);
                     startActivity(memoIntent);
                 });
+
+                listener.onTextChanged(notificationBroadcastReciever);
 
             } else {
                 button.setText("洗濯終了ボタン");
@@ -484,8 +480,10 @@ public class OutsideFragment extends Fragment {
             }
         });
 
-
     }
 
+    interface TextChangedListener {
+        void onTextChanged(NotificationBroadcastReciever notificationBroadcastReciever);
+    }
 
 }
