@@ -5,17 +5,15 @@
     android:id="@+id/activity_data"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    >
+    android:screenOrientation="portrait">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="160dp"
-        android:paddingTop="10dp"
+        android:layout_marginTop="140dp"
+        android:orientation="vertical"
         android:paddingLeft="30dp"
         android:paddingRight="30dp">
 
@@ -41,13 +39,13 @@
             android:text="TextView" />
 
         <EditText
+            android:id="@+id/memoText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="textMultiLine|textPersonName"
             android:ems="10"
-            android:id="@+id/memoText"
             android:gravity="top"
-            android:hint="メモ" />
+            android:hint="メモ"
+            android:inputType="textMultiLine|textPersonName" />
 
     </LinearLayout>
 

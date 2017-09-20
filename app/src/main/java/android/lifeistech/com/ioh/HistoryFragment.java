@@ -23,23 +23,21 @@ import java.util.List;
 
 public class HistoryFragment extends Fragment {
 
-    //CalendarView calendarView = new CalendarView(this.getContext());
-    CalendarView calendarView;
     List<Data> mData;
     DataAdapter mDataAdapter;
     ListView mListView;
-    Gson gson;
-    SharedPreferences pref;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_history, container, false);
+
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
     }
 
     private List<Data> loadData() {
@@ -51,6 +49,7 @@ public class HistoryFragment extends Fragment {
         list = gson.fromJson(json, new TypeToken<ArrayList<Data>>() {}.getType());
 
         return list;
+
     }
 
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -63,22 +62,11 @@ public class HistoryFragment extends Fragment {
 
         swipeLayout.setOnRefreshListener(() -> {
             mData = loadData();
-//            mDataAdapter.notifyDataSetChanged();
             mDataAdapter.setmData(mData);
             if(swipeLayout.isRefreshing()) {
                 swipeLayout.setRefreshing(false);
             }
         });
-
-        // load
-//        gson = new Gson();
-//        pref = getContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
-//        mData = new ArrayList<Data>();
-//        if (mData.size() == 0) {
-//            String json = pref.getString("SAVE_KEY", "[]");
-//            mData = gson.fromJson(json, new TypeToken<ArrayList<Data>>() {
-//            }.getType());
-//        }
 
         mData = loadData();
 
@@ -94,7 +82,7 @@ public class HistoryFragment extends Fragment {
             intent.putExtra("position", position);
             startActivity(intent);
         });
-    }
 
+    }
 
 }

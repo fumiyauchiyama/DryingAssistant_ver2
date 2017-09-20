@@ -16,13 +16,12 @@ public class TutorialView extends FrameLayout {
 
     public TutorialView(Context context, AttributeSet attributeSet) {
         this(context, attributeSet, 0);
+
     }
 
     public TutorialView(Context context, AttributeSet attributeSet, int defStyleAttr) {
         super(context, attributeSet, defStyleAttr);
-
         inflate(context, R.layout.view_tutorial, this);
-
 
     }
 }

@@ -86,17 +86,6 @@ public class DataAdapter extends ArrayAdapter<Data> {
             viewHoler.timetextview.setText(String.valueOf(item.time) + "分 , " + String.valueOf(item.year));
 
             Log.d("Adapter", "item is not null: " + mData.size());
-            /*viewHoler.Card.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    //Intent intent = new Intent(this,DataActivity.class);
-                    //startActivity(intent);
-
-                    Intent intent = new Intent(MainActivity.this, DataActivity.class);
-                    startActivity(intent);
-                }
-            });
-            */
 
         }
 

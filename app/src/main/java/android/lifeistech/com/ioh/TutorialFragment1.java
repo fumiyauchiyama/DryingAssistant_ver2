@@ -24,6 +24,7 @@ public class TutorialFragment1 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.view_tutorial, container, false);
+
     }
 
     @Override
@@ -34,7 +35,6 @@ public class TutorialFragment1 extends Fragment {
         SharedPreferences.Editor editor = plef.edit();
         editor.putBoolean("key_tutorial",true);
         editor.commit();
-
 
     }
 }

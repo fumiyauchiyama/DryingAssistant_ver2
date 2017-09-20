@@ -58,7 +58,7 @@ public class DataActivity extends AppCompatActivity {
         String json = pref.getString("SAVE_KEY", "[]");
         mdatas = gson.fromJson(json, new TypeToken<ArrayList<Data>>() {
         }.getType());
-        //mdatas.add(new Data(0, 0, 0, 0, 0, "初回記念スタンプ", "ご使用いただきありがとうございます！",2017));
+
         position = intent.getIntExtra("position", 0);
         Log.d("int i =", valueOf(position));
         data = mdatas.get(position);
@@ -76,10 +76,10 @@ public class DataActivity extends AppCompatActivity {
             setBackground(data.weather);
 
         }
+
     }
 
     private void setImage(String weather){
-
         if(weather.startsWith("Thunderstorm")){
             fab.setImageResource(R.drawable.for_fab_thunders);
 
@@ -109,7 +109,6 @@ public class DataActivity extends AppCompatActivity {
     }
 
     private void setBackground(String weather){
-
         if(weather.startsWith("Thunderstorm")){
             fab.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.thunderstorm)));
 
@@ -147,6 +146,8 @@ public class DataActivity extends AppCompatActivity {
             editor.commit();
             finish();
         }
+
         return true;
+
     }
 }

@@ -4,15 +4,15 @@ import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -61,7 +61,7 @@ public class OutsideFragment extends Fragment{
     TextView textwaterdata;
     TextView TemperatureTextView;
     TextView textweather;
-    TextView pretextView;       //pre = Prediction
+    TextView predictiontextView;
 
     int waterdata;
     int ch0;
@@ -89,15 +89,10 @@ public class OutsideFragment extends Fragment{
 
     List<Data> mdatas;
 
-    NotificationBroadcastReciever notificationBroadcastReciever;
-    IntentFilter intentFilter;
-
-    private TextChangedListener listener;
-    public static Fragment createIntent() {
-        return new OutsideFragment();
-    }
+    NotificationManager nm;
 
     public void getNowDate() {
+
         Date date = new Date();
         SimpleDateFormat mdf = new SimpleDateFormat("MM");
         month = Integer.parseInt(mdf.format(date));
@@ -105,38 +100,50 @@ public class OutsideFragment extends Fragment{
         day = Integer.parseInt(ddf.format(date));
         SimpleDateFormat ydf = new SimpleDateFormat("yyyy");
         year = Integer.parseInt(ydf.format(date));
+
     }
 
     private void setProgressBar() {
+
         ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", preTime);
         animation.setDuration(500);
         animation.setInterpolator(new DecelerateInterpolator());
         animation.start();
+
     }
 
-    private void Notification(String title, String content, String ticker, int Iconid,int Notificationid) {
-        android.support.v7.app.NotificationCompat.Builder builder = new android.support.v7.app.NotificationCompat.Builder(getContext());
-        builder.setSmallIcon(Iconid);
-        builder.setLargeIcon(BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.ic_launcher));
-        builder.setContentTitle(title);
-        builder.setContentText(content);
-        builder.setTicker(ticker);
-        builder.setDefaults(Notification.DEFAULT_ALL);
-        builder.setWhen(System.currentTimeMillis());
-        NotificationManager manager = (NotificationManager) getActivity().getSystemService(Service.NOTIFICATION_SERVICE);
-        manager.notify(Notificationid, builder.build());
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    private void Notification(String title, String content, int Iconid, int Notificationid) {
+
+        nm = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Notification notification = new Notification.Builder(getContext())
+                .setContentTitle(title)
+                .setContentText(content)
+                .setAutoCancel(false)
+                .setSmallIcon(Iconid)
+                .setLargeIcon(BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.ic_launcher))
+                .build();
+
+        notification.flags = Notification.FLAG_NO_CLEAR;
+        nm.notify(Notificationid, notification);
+
     }
 
     private void commit(Boolean DryingBoolean, Boolean notificationBoolean) {
+
         editor.putBoolean("aboolean", DryingBoolean);
         editor.putBoolean("notificationBoolean", notificationBoolean);
         editor.commit();
+
     }
 
     private boolean getBooleans() {
+
         DryingBoolean = pref.getBoolean("aboolean", false);
         notificationBoolean = pref.getBoolean("notificationBoolean", false);
         return DryingBoolean;
+
     }
 
     private void setdata() {
@@ -144,40 +151,39 @@ public class OutsideFragment extends Fragment{
         waterdata = (ch0 + ch1) / 2;
 
         if (temperature == 0 || hun == 0) {
-            return;
-        } else {
-            //preTime = 85680 / (temperature * (100 - hun));
-            preTime = 714 * waterdata / (temperature * (100 - hun));
-        }
 
+            return;
+
+        } else {
+
+            preTime = 714 * waterdata / (temperature * (100 - hun));
+
+        }
 
         textwaterdata.setText(String.valueOf(waterdata));
         TemperatureTextView.setText(temperature + "℃、" + hun + "%");
-        pretextView.setText(preTime / 60 + "時間" + preTime % 60 + "分");
+        predictiontextView.setText(preTime / 60 + "時間" + preTime % 60 + "分");
         setProgressBar();
+
     }
 
     private void getWeather() {
-        // リクエストオブジェクトを作って
+
         Request request = new Request.Builder()
-                // URLを生成
                 .url("http://api.openweathermap.org/data/2.5/find?lat=35.283611&lon=139.667221&cnt=1&APPID=b6de807d926981bf3ac26ca77b1a2ae7")
                 .get()
                 .build();
-        // クライアントオブジェクトを作成する
+
         OkHttpClient client = new OkHttpClient();
-        // 新しいリクエストを行う
         client.newCall(request).enqueue(new Callback() {
-            // 通信が失敗した時
+
             @Override
             public void onFailure(Request request, IOException e) {
                 e.printStackTrace();
             }
 
-            // 通信が成功した時
             @Override
             public void onResponse(Response response) throws IOException {
-                // 通信結果をログに出力する
                 Log.d("onResponse", response.toString());
                 final String json = response.body().string();
                 mHandler.post(new Runnable() {
@@ -195,11 +201,11 @@ public class OutsideFragment extends Fragment{
         Log.d("Json", json);
         try {
             JSONObject jsonObject = new JSONObject(json);
-            // {forecasts[] -> 0 -> {dataLabel, telop, temperature}}
+
             JSONArray listArray = jsonObject.getJSONArray("list");
 
             Log.d("json", listArray.toString());
-            // 0番目のものが今日の天気なので取得する
+
             JSONObject todayWeatherJson = listArray.getJSONObject(0);
 
             Log.d("json", todayWeatherJson.toString());
@@ -210,7 +216,6 @@ public class OutsideFragment extends Fragment{
 
             String telop = WeatherJson.getString("main");
             textweather.setText(telop);
-
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -223,10 +228,9 @@ public class OutsideFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_outside, container, false);
 
-
     }
 
-
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -237,7 +241,7 @@ public class OutsideFragment extends Fragment{
         textwaterdata = (TextView) view.findViewById(R.id.texthan);
         textweather = (TextView) view.findViewById(R.id.textwea);
         TemperatureTextView = (TextView) view.findViewById(R.id.texttem);
-        pretextView = (TextView) view.findViewById(R.id.PretextView);
+        predictiontextView = (TextView) view.findViewById(R.id.PretextView);
         button = (Button) view.findViewById(R.id.click);
         progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
 
@@ -258,14 +262,11 @@ public class OutsideFragment extends Fragment{
             button.setText("洗濯終了ボタン");
             Log.d("aboolean=", String.valueOf(DryingBoolean));
 
-
         } else {
             button.setText("洗濯開始ボタン");
             Log.d("aboolean=", String.valueOf(DryingBoolean));
 
-
         }
-
 
         refMug.addChildEventListener(new ChildEventListener() {
             int i = 0;
@@ -290,6 +291,7 @@ public class OutsideFragment extends Fragment{
 
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
@@ -321,16 +323,15 @@ public class OutsideFragment extends Fragment{
                 getBooleans();
 
                 if (textweather.getText().toString().equals("Rain") || textweather.getText().toString().equals("Drizzle") && isAlreadyNotified) {
-                    Notification("雨が降っています！", "洗濯物が濡れている可能性があります", "雨が降ってます！", R.drawable.for_fab_rains, 1);
+                    Notification("雨が降っています！", "洗濯物が濡れている可能性があります", R.drawable.for_fab_rains, 1);
                     isAlreadyNotified = false;
                     editor.putBoolean("rainBoolean", isAlreadyNotified);
                     editor.commit();
                 }
 
-
                 if (waterdata <= 5 && DryingBoolean && notificationBoolean) {
 
-                    Notification("洗濯物を取り込みましょう", "取り込む時にスイッチを切ってください", "乾燥しました！", R.drawable.notification, 0);
+                    Notification("洗濯物を取り込みましょう", "取り込む時にスイッチを切ってください", R.drawable.notification_finish, 0);
                     notificationBoolean = false;
                     commit(DryingBoolean, notificationBoolean);
 
@@ -358,12 +359,12 @@ public class OutsideFragment extends Fragment{
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
+
         });
 
         button.setOnClickListener(v -> {
-
             if (DryingBoolean) {
-                getActivity().stopService(new Intent(getActivity(), NotificationService.class));
+
                 DryingBoolean = false;
                 button.setText("洗濯開始ボタン");
                 Toast.makeText(getContext(), "洗濯を終了しました", Toast.LENGTH_SHORT).show();
@@ -375,9 +376,11 @@ public class OutsideFragment extends Fragment{
 
                 mdatas = gson.fromJson(pref.getString("SAVE_KEY", "[]"), List.class);
                 Log.d("pref", pref.getString(pref.getString("SAVE_KEY", "not String"), "List.class"));
+
                 if (mdatas == null) {
                     mdatas = new ArrayList<Data>();
                 }
+
                 mdatas.add(0, mdata);
 
                 editor.putString("SAVE_KEY", gson.toJson(mdatas));
@@ -386,15 +389,18 @@ public class OutsideFragment extends Fragment{
                 if(mTimer != null) {
                     mTimer.cancel();
                 }
+
                 if (preTimer != null) {
                     preTimer.cancel();
                 }
+
                 progressBar.setProgress(0);
-                pretextView.setText("00:00");
+                predictiontextView.setText("00:00");
                 final View view1 = getActivity().getLayoutInflater().inflate(dialog, null);
                 new AlertDialog.Builder(getActivity()).setView(view1).show();
 
                 ImageView imageView = (ImageView) view1.findViewById(R.id.dialogimage);
+
                 if (mdata.weather.equals("Thunderstorm")) {
                     imageView.setImageResource(R.drawable.stamp_thunder);
                 } else if (mdata.weather.equals("Drizzle")) {
@@ -421,7 +427,7 @@ public class OutsideFragment extends Fragment{
                     startActivity(memoIntent);
                 });
 
-                listener.onTextChanged(notificationBroadcastReciever);
+                nm.cancel(0);
 
             } else {
                 button.setText("洗濯終了ボタン");
@@ -441,6 +447,7 @@ public class OutsideFragment extends Fragment{
 
                 if (temperature == 0 || hun == 0) {
                     return;
+
                 } else {
                     preTime = 714 * waterdata / (temperature * (100 - hun));
                     preTimed = preTime;
@@ -454,10 +461,10 @@ public class OutsideFragment extends Fragment{
                                 preTime--;
                                 if (preTime == 0) {
                                     progressBar.setProgress(0);
-                                    pretextView.setText("00:00");
+                                    predictiontextView.setText("00:00");
                                     preTimer.cancel();
                                 }
-                                pretextView.setText(preTime / 60 + "時間" + preTime % 60 + "分");
+                                predictiontextView.setText(preTime / 60 + "時間" + preTime % 60 + "分");
                                 progressBar.setMax(preTimed);
                                 setProgressBar();
                             });
@@ -470,20 +477,10 @@ public class OutsideFragment extends Fragment{
 
                 }
 
-                Notification("乾燥中です", "取り込む時にスイッチを切ってください", "乾燥中です", R.drawable.notification,0);
-                getActivity().startService(new Intent(getActivity(), NotificationService.class));
-
-                notificationBroadcastReciever = new NotificationBroadcastReciever();
-                intentFilter = new IntentFilter();
-                intentFilter.addAction("MY_ACTION");
-                getActivity().registerReceiver(notificationBroadcastReciever, intentFilter);
+                Notification("乾燥中です", "取り込む時にスイッチを切ってください", R.drawable.notification,0);
             }
         });
 
-    }
-
-    interface TextChangedListener {
-        void onTextChanged(NotificationBroadcastReciever notificationBroadcastReciever);
     }
 
 }
